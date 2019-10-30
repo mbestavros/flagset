@@ -24,11 +24,11 @@ matrix:
   fast_finish: true
 install:
   - rustup component add rustfmt
-  - if [ $TRAVIS_RUST_VERSION != "1.31.0" ]; then
+  - TRAVIS_RUST_VERSION_SEMVER=( ${TRAVIS_RUST_VERSION//./ } ); if [[ ${TRAVIS_RUST_VERSION_SEMVER[1]} -ge 36]]; then
       cargo install --force cargo-audit;
     fi
 script:
   - cargo fmt -- --check
-  - if [ $TRAVIS_RUST_VERSION != "1.31.0" ]; then
-      cargo audit;
+  - if type -f cargo-audit; then
+      cargo-audit
     fi
